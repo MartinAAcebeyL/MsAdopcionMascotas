@@ -1,3 +1,7 @@
-from django.db import models
+from djongo import models
 
-# Create your models here.
+
+class Pets(models.Model):
+    campo1 = models.CharField(max_length=255)
+    campo2 = models.IntegerField()
+    campo3 = models.IntegerField()
