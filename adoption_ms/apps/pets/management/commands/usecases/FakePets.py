@@ -3,7 +3,7 @@ import random
 from faker import Faker
 from typing import Tuple
 
-from . import bolivian_places_provider, FakePetNamesProvider
+from . import bolivian_places_provider, FakePetNamesProvider, AnimalBreedsProvider
 
 
 class FakePet:
@@ -11,6 +11,7 @@ class FakePet:
         self.fake = Faker(["es_ES", "en_US"])
         self.fake.add_provider(bolivian_places_provider)
         self.fake.add_provider(FakePetNamesProvider)
+        self.fake.add_provider(AnimalBreedsProvider)
 
     def fake_name(self) -> str:
         return self.fake.fake_pet_name()
@@ -32,9 +33,10 @@ class FakePet:
         """
 
     def fake_breed(self):
-        """
-        This method is still under construction
-        """
+        dog_breeds = self.fake.dog_breed
+        cat_breeds = self.fake.cat_breed
+
+        return random.choice([dog_breeds(), cat_breeds()])
 
     def fake_city(self) -> str:
         return self.fake.bolivian_places_provider()
