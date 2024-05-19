@@ -3,7 +3,12 @@ import random
 from faker import Faker
 from typing import Tuple
 
-from . import bolivian_places_provider, FakePetNamesProvider, AnimalBreedsProvider
+from . import (
+    bolivian_places_provider,
+    FakePetNamesProvider,
+    AnimalBreedsProvider,
+    PersonProvider,
+)
 
 
 class FakePet:
@@ -12,14 +17,15 @@ class FakePet:
         self.fake.add_provider(bolivian_places_provider)
         self.fake.add_provider(FakePetNamesProvider)
         self.fake.add_provider(AnimalBreedsProvider)
+        self.fake.add_provider(PersonProvider)
 
-    def fake_name(self) -> str:
+    def _fake_name(self) -> str:
         return self.fake.fake_pet_name()
 
-    def fake_history(self) -> str:
+    def _fake_history(self) -> str:
         return self.fake.text(max_nb_chars=50)
 
-    def fake_age(self) -> Tuple[int, str]:
+    def _fake_age(self) -> Tuple[int, str]:
         age = random.randint(0, 15)
         time = "años"
         if not age:
@@ -27,25 +33,36 @@ class FakePet:
             time = "meses"
         return age, time
 
-    def fake_person_submit_pet(self):
-        """
-        This method is still under construction
-        """
+    def _fake_person_submit_pet(self):
+        return self.fake.fake_user()
 
-    def fake_breed(self):
+    def _fake_breed(self):
         dog_breeds = self.fake.dog_breed
         cat_breeds = self.fake.cat_breed
 
         return random.choice([dog_breeds(), cat_breeds()])
 
-    def fake_city(self) -> str:
+    def _fake_city(self) -> str:
         return self.fake.bolivian_places_provider()
 
-    def fake_sex(self) -> str:
+    def _fake_sex(self) -> str:
         return random.choice(["F", "M"])
 
-    def fake_size(self) -> int:
+    def _fake_size(self) -> int:
         return random.choice(["small", "middle", "big"])
 
-    def fake_status(self):
+    def _fake_status(self):
         return random.choice(["progress", "adopted", "able"])
+
+    def fake_a_pet(self):
+        return {
+            "name": self._fake_name(),
+            "history": self._fake_history(),
+            "age": self._fake_age(),
+            "person": self._fake_person_submit_pet(),
+            "breed": self._fake_breed(),
+            "city": self._fake_city(),
+            "sex": self._fake_sex(),
+            "size": self._fake_size(),
+            "status": self._fake_status(),
+        }
