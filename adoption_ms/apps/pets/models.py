@@ -1,7 +1,7 @@
-from djongo import models
-
-
-class Pets(models.Model):
-    campo1 = models.CharField(max_length=255)
-    campo2 = models.IntegerField()
-    campo3 = models.IntegerField()
+from ...frameworks import mongo_client
+class Pet:
+    @classmethod
+    def get_all_users(cls):
+        users_collection = mongo_client.get_collection("users")
+        all_users = list(users_collection.find({}))
+        return all_users

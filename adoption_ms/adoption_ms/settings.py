@@ -69,20 +69,7 @@ WSGI_APPLICATION = "adoption_ms.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "djongo",
-        "NAME": os.getenv("DATABASE_NAME"),
-        "ENFORCE_SCHEMA": False,
-        "CLIENT": {
-            "host": "monguito:27017",
-            "port": 27017,
-            "username": os.getenv("MONGO_USER"),
-            "password": os.getenv("MONGO_USER_PASSWORD"),
-            "authSource": "admin",
-        },
-    }
-}
+# I removed database configuration because i will use pymongo against djongo
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
