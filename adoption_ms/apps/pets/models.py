@@ -1,4 +1,5 @@
-from ...frameworks import mongo_client
+from frameworks import mongo_client
+
 class Pet:
     @classmethod
     def get_all_users(cls):

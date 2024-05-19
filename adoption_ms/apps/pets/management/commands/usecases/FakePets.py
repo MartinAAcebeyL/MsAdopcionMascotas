@@ -13,7 +13,7 @@ from . import (
 
 class FakePet:
     def __init__(self) -> None:
-        self.fake = Faker(["es_ES", "en_US"])
+        self.fake = Faker(["es_ES"])
         self.fake.add_provider(bolivian_places_provider)
         self.fake.add_provider(FakePetNamesProvider)
         self.fake.add_provider(AnimalBreedsProvider)
