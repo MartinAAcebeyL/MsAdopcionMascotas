@@ -1,4 +1,7 @@
 import logging
+from typing import Union
+from bson import ObjectId
+
 from frameworks import mongo_client
 
 
@@ -19,3 +22,15 @@ class Pet:
         except Exception as e:
             logging.error(f"An error occurred while saving the pet: {e}")
             return None
+
+    def get_a_pet(self, pet_id: str) -> Union[dict, None]:
+        if not isinstance(pet_id, ObjectId):
+            pet_id = ObjectId(pet_id)
+        filter_criteria = {"_id": pet_id}
+        pet = self.pets_collection.find_one(filter_criteria)
+
+        if pet:
+            pet["_id"] = str(pet["_id"])
+            pet["person"]["_id"] = str(pet["person"]["_id"])
+
+        return pet
