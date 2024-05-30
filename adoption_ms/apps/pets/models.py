@@ -1,5 +1,5 @@
 import logging
-from typing import Union
+from typing import Union, List
 from bson import ObjectId
 
 from frameworks import mongo_client
@@ -34,3 +34,13 @@ class Pet:
             pet["person"]["_id"] = str(pet["person"]["_id"])
 
         return pet
+
+    def get_pets_by_filters(self, *, filters: List) -> Union[List[any], None]:
+        pets = list(self.pets_collection.find(filters))
+
+        for pet in pets:
+            if pet:
+                pet["_id"] = str(pet["_id"])
+                pet["person"]["_id"] = str(pet["person"]["_id"])
+
+        return pets
