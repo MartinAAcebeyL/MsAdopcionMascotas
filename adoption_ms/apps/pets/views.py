@@ -1,9 +1,11 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework import status
 
 from .models import Pet
-from .serializers import QueryParamsToFilterPets
+from .serializers import QueryParamsToFilterPets, PetRepresentation
+from utils import CustomPagination, StandardResultsSetPagination
 
 
 class GetPetView(APIView):
@@ -67,9 +69,17 @@ class FilterPetView(APIView):
         if query_params.get("status"):
             filter_criteria["status"] = query_params.get("status")
         if query_params.get("value") and query_params.get("unit"):
-            filter_criteria["age.0"] = {
-                "$lte": query_params.get("value")
-            } 
+            filter_criteria["age.0"] = {"$lte": query_params.get("value")}
             filter_criteria["age.1"] = query_params.get("unit")
 
         return filter_criteria
+
+
+class PaginatePetView(ListAPIView):
+    pagination_class = CustomPagination
+    serializer_class = PetRepresentation
+
+    def get_queryset(self):
+        pet_model = Pet()
+        queryset = pet_model.get_pets_by_filters(filters={})
+        return queryset
