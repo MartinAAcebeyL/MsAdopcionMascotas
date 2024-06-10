@@ -31,6 +31,12 @@ class QueryParamsToFilterPets(BasePetAttributes):
         return validated_data
 
 
+class UpdatePet(QueryParamsToFilterPets):
+    """
+    Updates pet data with validation based on QueryParamsToFilterPets class.
+    """
+
+
 class PetRepresentation(BasePetAttributes):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
