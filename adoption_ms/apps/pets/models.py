@@ -1,5 +1,5 @@
 import logging
-from typing import Union, List
+from typing import Union, List, Tuple
 from bson import ObjectId
 
 from frameworks import mongo_client
@@ -24,23 +24,40 @@ class Pet:
             return None
 
     def get_a_pet(self, pet_id: str) -> Union[dict, None]:
-        if not isinstance(pet_id, ObjectId):
-            pet_id = ObjectId(pet_id)
+        pet_id = self.check_pet_id(pet_id)
         filter_criteria = {"_id": pet_id}
         pet = self.pets_collection.find_one(filter_criteria)
-
-        if pet:
-            pet["_id"] = str(pet["_id"])
-            pet["person"]["_id"] = str(pet["person"]["_id"])
-
+        self.serialize_a_complex_data(pet)
         return pet
 
     def get_pets_by_filters(self, *, filters: List) -> Union[List[any], None]:
         pets = list(self.pets_collection.find(filters))
 
         for pet in pets:
-            if pet:
-                pet["_id"] = str(pet["_id"])
-                pet["person"]["_id"] = str(pet["person"]["_id"])
+            self.serialize_a_complex_data(pet)
 
         return pets
+
+    def serialize_a_complex_data(self, data):
+        if data:
+            data["_id"] = str(data["_id"])
+            data["person"]["_id"] = str(data["person"]["_id"])
+
+    def check_pet_id(self, id: str):
+        if not isinstance(id, ObjectId):
+            return ObjectId(id)
+        return id
+
+    def mofify_a_pet(self, new_data: dict, id: str) -> Tuple[int]:
+        pet_id = self.check_pet_id(id)
+        filter_criteria = {"_id": pet_id}
+        new_data = {"$set": new_data}
+        pet = self.pets_collection.update_one(filter_criteria, new_data)
+        return pet.modified_count, pet.matched_count
+
+    def delete_a_pet(self, id: str) -> None:
+        pet_id = self.check_pet_id(id)
+        filter_criteria = {"_id": pet_id}
+        pet = self.pets_collection.delete_one(filter_criteria)
+        self.serialize_a_complex_data(pet)
+        return pet
