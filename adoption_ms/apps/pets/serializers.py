@@ -7,6 +7,7 @@ class BasePetAttributes(serializers.Serializer):
     breed = serializers.CharField(required=False)
     city = serializers.CharField(required=False)
     name = serializers.CharField(required=False)
+    type = serializers.CharField(required=False)
     history = serializers.CharField(required=False)
     sex = serializers.ChoiceField(choices=["F", "M"], required=False)
     size = serializers.ChoiceField(choices=["small", "middle", "big"], required=False)
