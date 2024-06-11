@@ -1,9 +1,13 @@
 from django.urls import path
 
-from .views import GetPetView, FilterPetView, PaginatePetView
+from .views import GetUpdateCreatePetView, FilterPetView, PaginatePetView
 
 urlpatterns = [
-    path("get/<str:pk>", GetPetView.as_view(), name="get one pet"),
+    path(
+        "get/<str:pk>",
+        GetUpdateCreatePetView.as_view(),
+        name="get, update and create pet",
+    ),
     path("filter", FilterPetView.as_view(), name="filter pets by criteria"),
     path("all", PaginatePetView.as_view(), name="Pagination of  all pets"),
 ]

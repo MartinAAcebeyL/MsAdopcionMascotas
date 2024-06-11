@@ -26,6 +26,7 @@ class CommonPetMethods(ABC):
             "status": validated_data.get("status"),
             "value": validated_data.get("value"),
             "unit": validated_data.get("unit"),
+            "type": validated_data.get("unit"),
         }
 
     def _prepare_data(self, validated_data: dict) -> dict:
@@ -40,6 +41,8 @@ class CommonPetMethods(ABC):
             data["size"] = validated_data.get("size")
         if validated_data.get("status"):
             data["status"] = validated_data.get("status")
+        if validated_data.get("type"):
+            data["type"] = validated_data.get("type")
         self.modify_age_param(data, validated_data)
         return data
 
@@ -48,7 +51,7 @@ class CommonPetMethods(ABC):
         pass
 
 
-class GetPetView(APIView, CommonPetMethods):
+class GetUpdateCreatePetView(APIView, CommonPetMethods):
     serializer_class = UpdatePet
 
     def get(self, request, pk):
@@ -91,23 +94,6 @@ class GetPetView(APIView, CommonPetMethods):
                     {"message": f"pet with id {pk} was updated"},
                     status=status.HTTP_200_OK,
                 )
-        except Exception as e:
-            return Response(
-                {"error": f"An error occurred: {str(e)}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-    def delete(self, request, pk):
-        try:
-            pet_model = Pet()
-            pet = pet_model.delete_a_pet(pk)
-
-            if pet:
-                return Response(pet, status=status.HTTP_200_OK)
-            return Response(
-                {"message": f"Pet with id {pk} does not found"},
-                status=status.HTTP_404_NOT_FOUND,
-            )
         except Exception as e:
             return Response(
                 {"error": f"An error occurred: {str(e)}"},
