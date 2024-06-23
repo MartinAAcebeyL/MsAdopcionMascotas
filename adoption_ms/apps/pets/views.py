@@ -26,7 +26,7 @@ class CommonPetMethods(ABC):
             "status": validated_data.get("status"),
             "value": validated_data.get("value"),
             "unit": validated_data.get("unit"),
-            "type": validated_data.get("unit"),
+            "type": validated_data.get("type"),
         }
 
     def _prepare_data(self, validated_data: dict) -> dict:
@@ -133,10 +133,10 @@ class FilterPetView(APIView, CommonPetMethods):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-    def modify_age_param(self, data, base_data):
-        data[VALUE_POSITION] = {"$lte": base_data.get("value")}
-        data[UNIT_POSITION] = base_data.get("unit")
-        return data
+    def modify_age_param(self, data: dict, base_data: dict) -> None:
+        if base_data.get("value") and base_data.get("unit"):
+            data[VALUE_POSITION] = {"$lte": base_data.get("value")}
+            data[UNIT_POSITION] = base_data.get("unit")
 
 
 class PaginatePetView(ListAPIView):
