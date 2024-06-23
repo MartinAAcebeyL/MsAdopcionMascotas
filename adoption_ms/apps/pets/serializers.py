@@ -7,29 +7,41 @@ class BasePetAttributes(serializers.Serializer):
     breed = serializers.CharField(required=False)
     city = serializers.CharField(required=False)
     name = serializers.CharField(required=False)
-    type = serializers.CharField(required=False)
+    type = serializers.ChoiceField(choices=["gato", "perro"], required=False)
     history = serializers.CharField(required=False)
     sex = serializers.ChoiceField(choices=["F", "M"], required=False)
     size = serializers.ChoiceField(choices=["small", "middle", "big"], required=False)
     status = serializers.ChoiceField(
         choices=["progress", "adopted", "able"], required=False
     )
+    breed = serializers.CharField(required=False)
 
 
 class QueryParamsToFilterPets(BasePetAttributes):
     def validate(self, data):
         validated_data = super().validate(data)
-
-        if "value" in validated_data and "unit" not in validated_data:
-            raise serializers.ValidationError(
-                "El campo 'unit' es obligatorio cuando se proporciona el campo 'value'."
-            )
-        elif "unit" in validated_data and "value" not in validated_data:
-            raise serializers.ValidationError(
-                "El campo 'value' es obligatorio cuando se proporciona el campo 'unit'."
-            )
+        self.validate_mutual_dependence(validated_data, "value", "unit")
+        self.validate_dependence(
+            data=validated_data, dependencie_a="breed", dependencie_b="type"
+        )
 
         return validated_data
+
+    def validate_mutual_dependence(self, data, dependencie_a: str, dependencie_b: str):
+        if dependencie_a in data and dependencie_b not in data:
+            raise serializers.ValidationError(
+                f"El campo {dependencie_b} es obligatorio cuando se proporciona el campo {dependencie_a}."
+            )
+        elif dependencie_b in data and dependencie_a not in data:
+            raise serializers.ValidationError(
+                f"El campo {dependencie_a} es obligatorio cuando se proporciona el campo {dependencie_b}."
+            )
+
+    def validate_dependence(self, *, data, dependencie_a: str, dependencie_b: str):
+        if dependencie_a in data and dependencie_b not in data:
+            raise serializers.ValidationError(
+                f"El campo {dependencie_b} es obligatorio cuando se proporciona el campo {dependencie_a}."
+            )
 
 
 class UpdatePet(QueryParamsToFilterPets):
