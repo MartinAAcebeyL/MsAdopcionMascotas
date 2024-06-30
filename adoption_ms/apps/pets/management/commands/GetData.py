@@ -22,7 +22,9 @@ class Command(BaseCommand):
             amount = options.get("amount", 5)
             fake_pet = FakePet()
             for _ in range(amount):
-                pet_model.save_a_pet(fake_pet.fake_a_pet())
+                new_pet = fake_pet.fake_a_pet()
+                pet_model.save_a_pet(new_pet)
+
             self.stdout.write(self.style.SUCCESS("Data saved successfully"))
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Something was wrong: {e}"))

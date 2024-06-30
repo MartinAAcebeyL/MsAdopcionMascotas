@@ -54,6 +54,9 @@ class FakePet:
     def _fake_status(self):
         return random.choice(["progress", "adopted", "able"])
 
+    def _fake_type(self):
+        return random.choice(["Gato", "Perro"])
+
     def fake_a_pet(self):
         return {
             "name": self._fake_name(),
@@ -61,6 +64,7 @@ class FakePet:
             "age": self._fake_age(),
             "person": self._fake_person_submit_pet(),
             "breed": self._fake_breed(),
+            "type": self._fake_type(),
             "city": self._fake_city(),
             "sex": self._fake_sex(),
             "size": self._fake_size(),
