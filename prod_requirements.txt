@@ -2,3 +2,5 @@ Django
 pymongo==3.12.3
 djangorestframework
 python-dotenv
+google-auth
+djangorestframework_simplejwt

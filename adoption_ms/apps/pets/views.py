@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Pet
 from .serializers import (
@@ -99,6 +100,11 @@ class GetUpdateCreatePetView(APIView, CommonPetMethods):
                 {"error": f"An error occurred: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+    def get_permissions(self):
+        if self.request.method == "PUT":
+            return [IsAuthenticated()]
+        return []
 
     def get_prepare_data_to_updated(self, body: dict) -> dict:
         serializer = self.serializer_class(data=body)
