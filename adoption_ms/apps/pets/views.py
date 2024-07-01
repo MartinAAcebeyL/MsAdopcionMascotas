@@ -28,6 +28,7 @@ class CommonPetMethods(ABC):
             "value": validated_data.get("value"),
             "unit": validated_data.get("unit"),
             "type": validated_data.get("type"),
+            "name": validated_data.get("name"),
         }
 
     def _prepare_data(self, validated_data: dict) -> dict:
@@ -44,6 +45,8 @@ class CommonPetMethods(ABC):
             data["status"] = validated_data.get("status")
         if validated_data.get("type"):
             data["type"] = validated_data.get("type")
+        if validated_data.get("name"):
+            data["name"] = validated_data.get("name")
         self.modify_age_param(data, validated_data)
         return data
 
