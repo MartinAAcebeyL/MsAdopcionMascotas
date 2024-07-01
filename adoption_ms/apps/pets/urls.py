@@ -4,7 +4,7 @@ from .views import GetUpdateCreatePetView, FilterPetView, PaginatePetView
 
 urlpatterns = [
     path(
-        "get/<str:pk>",
+        "<str:pk>",
         GetUpdateCreatePetView.as_view(),
         name="get, update and create pet",
     ),
