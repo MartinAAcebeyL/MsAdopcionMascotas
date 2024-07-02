@@ -1,13 +1,10 @@
 from django.urls import path
 
-from .views import GetUpdateCreatePetView, FilterPetView, PaginatePetView
+from .views import GetUpdatePetView, FilterPetView, PaginatePetView, CreatePet
 
 urlpatterns = [
-    path(
-        "<str:pk>",
-        GetUpdateCreatePetView.as_view(),
-        name="get, update and create pet",
-    ),
+    path("<str:pk>", GetUpdatePetView.as_view(), name="get and update pet"),
     path("filter", FilterPetView.as_view(), name="filter pets by criteria"),
-    path("all", PaginatePetView.as_view(), name="Pagination of  all pets"),
+    path("all", PaginatePetView.as_view(), name="Pagination of all pets"),
+    path("create/", CreatePet.as_view(), name="create-pet"),
 ]

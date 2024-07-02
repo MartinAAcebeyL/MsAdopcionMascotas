@@ -10,6 +10,7 @@ from .serializers import (
     QueryParamsToFilterPets,
     PetRepresentation,
     UpdatePet,
+    CreatePet,
 )
 from utils import CustomPagination
 
@@ -55,7 +56,22 @@ class CommonPetMethods(ABC):
         pass
 
 
-class GetUpdateCreatePetView(APIView, CommonPetMethods):
+class AlterRequestData(CommonPetMethods):
+    def get_prepare_data(self, body: dict) -> dict:
+        serializer = self.serializer_class(data=body)
+        serializer.is_valid(raise_exception=True)
+        validated_data_by_serializer = serializer.validated_data
+        pet_data_validate = self._get_validated_data(
+            validated_data=validated_data_by_serializer
+        )
+        return self._prepare_data(pet_data_validate)
+
+    def modify_age_param(self, data, base_data):
+        data[VALUE_POSITION] = base_data.get("value")
+        data[UNIT_POSITION] = base_data.get("unit")
+
+
+class GetUpdatePetView(APIView, AlterRequestData):
     serializer_class = UpdatePet
 
     def get(self, request, pk):
@@ -78,7 +94,7 @@ class GetUpdateCreatePetView(APIView, CommonPetMethods):
         try:
             body = request.data
             pet_model = Pet()
-            pet_data = self.get_prepare_data_to_updated(body=body)
+            pet_data = self.get_prepare_data(body=body)
             modified_count, matched_count = pet_model.mofify_a_pet(pet_data, pk)
 
             if modified_count == 0 and matched_count == 1:
@@ -109,18 +125,26 @@ class GetUpdateCreatePetView(APIView, CommonPetMethods):
             return [IsAuthenticated()]
         return []
 
-    def get_prepare_data_to_updated(self, body: dict) -> dict:
-        serializer = self.serializer_class(data=body)
-        serializer.is_valid(raise_exception=True)
-        validated_data_by_serializer = serializer.validated_data
-        pet_data_validate = self._get_validated_data(
-            validated_data=validated_data_by_serializer
-        )
-        return self._prepare_data(pet_data_validate)
 
-    def modify_age_param(self, data, base_data):
-        data[VALUE_POSITION] = base_data.get("value")
-        data[UNIT_POSITION] = base_data.get("unit")
+class CreatePet(APIView, AlterRequestData):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CreatePet
+
+    def post(self, request):
+        body = request.data
+        pet_model = Pet()
+        pet_data = self.get_prepare_data(body)
+        try:
+            new_pet = pet_model.create_a_pet(pet_data, request.user.username)
+            return Response(
+                data={"message": "Pet inserted successfully", "pet_id": new_pet},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {"messaeg": "something was wrong", "error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
 
 class FilterPetView(APIView, CommonPetMethods):

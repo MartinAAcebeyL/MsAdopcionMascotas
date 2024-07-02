@@ -66,3 +66,9 @@ class Pet:
         pet = self.pets_collection.delete_one(filter_criteria)
         self.serialize_a_complex_data(pet)
         return pet
+
+    def create_a_pet(self, pet: dict, user_id: str) -> str:
+        user = self.get_a_user_by_google_id(user_id)
+        pet.update({"person": user})
+        new_pet = self.pets_collection.insert_one(pet)
+        return str(new_pet.inserted_id)
