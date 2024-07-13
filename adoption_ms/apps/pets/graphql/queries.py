@@ -1,5 +1,7 @@
 from graphene import ObjectType, String, Field
-from .types import PetType
+from graphene.relay import ConnectionField, Connection
+
+from .types import PetType, PetConnection
 from apps.pets.db.models import Pet
 from apps.pets.db.entity import PetEntity
 
@@ -7,6 +9,7 @@ from apps.pets.db.entity import PetEntity
 class Query(ObjectType):
     hello = String(name=String(default_value="stranger"))
     pet = Field(PetType, id=String())
+    pets = ConnectionField(PetConnection)
 
     def resolve_hello(self, _, name):
         return f"Hello {name}!"
@@ -16,7 +19,18 @@ class Query(ObjectType):
         pet_data = pet_model.get_a_pet(id)
 
         if pet_data:
-            pet_data["mongo_id"] = pet_data["_id"]
+            pet_data["id"] = pet_data["_id"]
             del pet_data["_id"]
             return PetEntity(**pet_data)
         return None
+
+    def resolve_pets(self, _, **kwargs):
+        pet_model = Pet()
+        pets = pet_model.get_pets_by_filters(filters={})
+
+        array_pets = []
+        for pet in pets:
+            pet["id"] = pet["_id"]
+            del pet["_id"]
+            array_pets.append(PetEntity(**pet))
+        return array_pets
