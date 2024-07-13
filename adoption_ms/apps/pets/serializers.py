@@ -44,9 +44,9 @@ class QueryParamsToFilterPets(BasePetAttributes):
             )
 
 
-class UpdatePet(QueryParamsToFilterPets):
+class GetUpdatePet(QueryParamsToFilterPets):
     """
-    Updates pet data with validation based on QueryParamsToFilterPets class.
+    Get and updates pet data with validation based on QueryParamsToFilterPets class.
     """
 
 

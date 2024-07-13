@@ -5,11 +5,11 @@ from rest_framework.generics import ListAPIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Pet
+from .db.models import Pet
 from .serializers import (
     QueryParamsToFilterPets,
     PetRepresentation,
-    UpdatePet,
+    GetUpdatePet,
     CreatePet,
 )
 from utils import CustomPagination
@@ -72,7 +72,7 @@ class AlterRequestData(CommonPetMethods):
 
 
 class GetUpdatePetView(APIView, AlterRequestData):
-    serializer_class = UpdatePet
+    serializer_class = GetUpdatePet
 
     def get(self, request, pk):
         try:
