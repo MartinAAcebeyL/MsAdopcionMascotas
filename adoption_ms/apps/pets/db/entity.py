@@ -7,7 +7,7 @@ class PetEntity(models.Model):
         ("adopted", "Adopted"),
         ("progress", "In Progress"),
     ]
-    mongo_id = models.CharField(max_length=24)
+    id = models.CharField(max_length=24, primary_key=True)
     name = models.CharField(max_length=50)
     history = models.TextField()
     age_value = models.IntegerField()
