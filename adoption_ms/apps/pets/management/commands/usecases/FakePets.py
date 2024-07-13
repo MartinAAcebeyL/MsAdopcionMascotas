@@ -33,7 +33,7 @@ class FakePet:
             time = "meses"
         return age, time
 
-    def _fake_person_submit_pet(self):
+    def _fake_person_submit_pet(self)-> str:
         return self.fake.fake_user()
 
     def _fake_breed(self):
@@ -58,10 +58,12 @@ class FakePet:
         return random.choice(["Gato", "Perro"])
 
     def fake_a_pet(self):
+        age_value, age_time = self._fake_age()
         return {
             "name": self._fake_name(),
             "history": self._fake_history(),
-            "age": self._fake_age(),
+            "age_value": age_value,
+            "age_time": age_time,
             "person": self._fake_person_submit_pet(),
             "breed": self._fake_breed(),
             "type": self._fake_type(),
