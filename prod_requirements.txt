@@ -4,3 +4,4 @@ djangorestframework
 python-dotenv
 google-auth
 djangorestframework_simplejwt
+graphene-django
