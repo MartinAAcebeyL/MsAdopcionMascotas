@@ -2,7 +2,7 @@ import requests
 from rest_framework import authentication, exceptions
 from django.contrib.auth.models import User
 
-from apps.pets.models import Pet
+from apps.pets.db.models import Pet
 
 
 class GoogleOAuth2Authentication(authentication.BaseAuthentication):

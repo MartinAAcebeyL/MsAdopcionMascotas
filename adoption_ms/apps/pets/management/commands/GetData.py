@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from .usecases import FakePet
-from apps.pets.models import Pet
+from apps.pets.db.models import Pet
 
 
 class Command(BaseCommand):

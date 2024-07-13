@@ -46,7 +46,7 @@ class Pet:
     def serialize_a_complex_data(self, data):
         if data:
             data["_id"] = str(data["_id"])
-            data["person"]["_id"] = str(data["person"]["_id"])
+            data["person"] = str(data["person"])
 
     def check_pet_id(self, id: str):
         if not isinstance(id, ObjectId):
