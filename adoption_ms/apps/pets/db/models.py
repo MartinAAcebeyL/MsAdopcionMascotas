@@ -67,8 +67,16 @@ class Pet:
         self.serialize_a_complex_data(pet)
         return pet
 
-    def create_a_pet(self, pet: dict, user_id: str) -> str:
+    def create_a_pet(
+        self, pet: dict, user_id: str, is_graphql_request: bool = False
+    ) -> str:
         user = self.get_a_user_by_google_id(user_id)
+        user = user["_id"]
         pet.update({"person": user})
         new_pet = self.pets_collection.insert_one(pet)
+        if is_graphql_request:
+            new_pet = self.get_a_pet(str(new_pet.inserted_id))
+            new_pet["id"] = new_pet["_id"]
+            del new_pet["_id"]
+            return new_pet
         return str(new_pet.inserted_id)
