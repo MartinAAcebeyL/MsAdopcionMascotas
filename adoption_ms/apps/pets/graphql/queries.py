@@ -1,5 +1,5 @@
 from graphene import ObjectType, String, Field
-from graphene.relay import ConnectionField, Connection
+from graphene.relay import ConnectionField
 
 from .types import PetType, PetConnection
 from apps.pets.db.models import Pet
@@ -7,12 +7,8 @@ from apps.pets.db.entity import PetEntity
 
 
 class Query(ObjectType):
-    hello = String(name=String(default_value="stranger"))
     pet = Field(PetType, id=String())
     pets = ConnectionField(PetConnection)
-
-    def resolve_hello(self, _, name):
-        return f"Hello {name}!"
 
     def resolve_pet(self, _, id: str):
         pet_model = Pet()
