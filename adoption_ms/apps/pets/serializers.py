@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 
 class BasePetAttributes(serializers.Serializer):
-    value = serializers.IntegerField(min_value=0, required=False)
-    unit = serializers.ChoiceField(choices=["años", "meses"], required=False)
+    age_value = serializers.IntegerField(min_value=0, required=False)
+    age_time = serializers.ChoiceField(choices=["años", "meses"], required=False)
     breed = serializers.CharField(required=False)
     city = serializers.CharField(required=False)
     name = serializers.CharField(required=False)
@@ -20,7 +20,7 @@ class BasePetAttributes(serializers.Serializer):
 class QueryParamsToFilterPets(BasePetAttributes):
     def validate(self, data):
         validated_data = super().validate(data)
-        self.validate_mutual_dependence(validated_data, "value", "unit")
+        self.validate_mutual_dependence(validated_data, "age_value", "age_time")
         self.validate_dependence(
             data=validated_data, dependencie_a="breed", dependencie_b="type"
         )
@@ -59,10 +59,9 @@ class CreatePet(QueryParamsToFilterPets):
 class PetRepresentation(BasePetAttributes):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        age = instance.get("age", [1, "mes"])
 
         return {
-            "edad": f"{age[0]} {age[1]}",
+            "edad": f"{rep.get('age_value', 1)} {rep.get('age_time', 'meses')}",
             "raza": rep.get("breed", ""),
             "ciudad": rep.get("city", ""),
             "sexo": "Macho" if rep.get("sex") == "M" else "Hembra",
