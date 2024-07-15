@@ -1,4 +1,6 @@
 from graphene import ObjectType
+from .types import CreatePetMutation
+
 
 class Mutation(ObjectType):
-    pass
+    create_pet = CreatePetMutation.Field()

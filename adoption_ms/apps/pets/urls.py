@@ -12,7 +12,7 @@ urlpatterns = [
     path("create/", CreatePet.as_view(), name="create-pet"),
     path(
         "graphql/",
-        GraphQLView.as_view(schema=schema),
+        csrf_exempt(GraphQLView.as_view(schema=schema)),
         name="graphql",
     ),
 ]
