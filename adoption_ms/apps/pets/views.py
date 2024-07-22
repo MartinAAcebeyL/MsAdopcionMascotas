@@ -26,10 +26,11 @@ class CommonPetMethods(ABC):
             "city": validated_data.get("city"),
             "size": validated_data.get("size"),
             "status": validated_data.get("status"),
-            "value": validated_data.get("value"),
-            "unit": validated_data.get("unit"),
+            "age_value": validated_data.get("age_value"),
+            "age_time": validated_data.get("age_time"),
             "type": validated_data.get("type"),
             "name": validated_data.get("name"),
+            "history": validated_data.get("history"),
         }
 
     def _prepare_data(self, validated_data: dict) -> dict:
@@ -48,6 +49,8 @@ class CommonPetMethods(ABC):
             data["type"] = validated_data.get("type")
         if validated_data.get("name"):
             data["name"] = validated_data.get("name")
+        if validated_data.get("history"):
+            data["history"] = validated_data.get("history")
         self.modify_age_param(data, validated_data)
         return data
 
@@ -67,8 +70,8 @@ class AlterRequestData(CommonPetMethods):
         return self._prepare_data(pet_data_validate)
 
     def modify_age_param(self, data, base_data):
-        data[VALUE_POSITION] = base_data.get("value")
-        data[UNIT_POSITION] = base_data.get("unit")
+        data["age_value"] = base_data.get("age_value")
+        data["age_time"] = base_data.get("age_time")
 
 
 class GetUpdatePetView(APIView, AlterRequestData):
