@@ -61,6 +61,8 @@ class PetRepresentation(BasePetAttributes):
         rep = super().to_representation(instance)
 
         return {
+            "id": instance.get("_id"),
+            "tipo": instance.get("type", ""),
             "edad": f"{rep.get('age_value', 1)} {rep.get('age_time', 'meses')}",
             "raza": rep.get("breed", ""),
             "ciudad": rep.get("city", ""),
