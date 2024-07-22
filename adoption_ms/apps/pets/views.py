@@ -14,9 +14,6 @@ from .serializers import (
 )
 from utils import CustomPagination
 
-VALUE_POSITION = "age.0"
-UNIT_POSITION = "age.1"
-
 
 class CommonPetMethods(ABC):
     def _get_validated_data(self, *, validated_data):
@@ -170,9 +167,20 @@ class FilterPetView(APIView, CommonPetMethods):
             )
 
     def modify_age_param(self, data: dict, base_data: dict) -> None:
-        if base_data.get("value") and base_data.get("unit"):
-            data[VALUE_POSITION] = {"$lte": base_data.get("value")}
-            data[UNIT_POSITION] = base_data.get("unit")
+        if (
+            base_data.get("age_value") is not None
+            and base_data.get("age_time") == "años"
+        ):
+            data["$or"] = [
+                {"age_time": "meses"},
+                {"age_time": "años", "age_value": {"$lte": base_data.get("age_value")}},
+            ]
+        if (
+            base_data.get("age_value") is not None
+            and base_data.get("age_time") == "meses"
+        ):
+            data["age_value"] = {"$lte": base_data.get("age_value")}
+            data["age_time"] = base_data.get("age_time")
 
 
 class PaginatePetView(ListAPIView):
