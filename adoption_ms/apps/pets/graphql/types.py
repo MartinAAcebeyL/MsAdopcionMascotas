@@ -29,6 +29,19 @@ class PetConnection(relay.Connection):
         node = PetNodeType
 
 
+class FilterInputType(graphene.InputObjectType):
+    age_value = graphene.Int()
+    age_time = graphene.String()
+    breed = graphene.String()
+    city = graphene.String()
+    name = graphene.String()
+    type = graphene.String()
+    history = graphene.String()
+    sex = SexEnum()
+    size = SizeEnum()
+    status = StatusEnum()
+
+
 # Mutations
 class UpdateResponseType(graphene.ObjectType):
     message = graphene.String()
