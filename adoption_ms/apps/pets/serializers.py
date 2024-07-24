@@ -7,14 +7,13 @@ class BasePetAttributes(serializers.Serializer):
     breed = serializers.CharField(required=False)
     city = serializers.CharField(required=False)
     name = serializers.CharField(required=False)
-    type = serializers.ChoiceField(choices=["gato", "perro"], required=False)
+    type = serializers.ChoiceField(choices=["Gato", "Perro"], required=False)
     history = serializers.CharField(required=False)
     sex = serializers.ChoiceField(choices=["F", "M"], required=False)
     size = serializers.ChoiceField(choices=["small", "middle", "big"], required=False)
     status = serializers.ChoiceField(
         choices=["progress", "adopted", "able"], required=False
     )
-    breed = serializers.CharField(required=False)
 
 
 class QueryParamsToFilterPets(BasePetAttributes):
