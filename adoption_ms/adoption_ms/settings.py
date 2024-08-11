@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "apps.pets",
     "apps.adoptions",
+    "apps.users",
 ]
 
 MIDDLEWARE = [
@@ -45,6 +46,14 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# djangorestframework_simplejwt settings
+SIMPLE_JWT = {
+    "SIGNING_KEY": os.getenv("SECRET_KEY"),
+    "ALGORITHM": "HS256",
+    "ACCESS_TOKEN_LIFETIME": 86400,
+    "REFRESH_TOKEN_LIFETIME": 604800,
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
