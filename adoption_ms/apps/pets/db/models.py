@@ -20,6 +20,11 @@ class Pet:
         users_collection = mongo_client.get_collection("users")
         return users_collection.find_one({"googleID": id})
 
+    @classmethod
+    def get_a_user_by_id(cls, id: str):
+        users_collection = mongo_client.get_collection("users")
+        return users_collection.find_one({"_id": ObjectId(id)})
+
     def save_a_pet(self, pet: dict):
         try:
             new_pet = self.pets_collection.insert_one(pet)

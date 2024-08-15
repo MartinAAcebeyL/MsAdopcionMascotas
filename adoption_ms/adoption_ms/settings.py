@@ -47,18 +47,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# djangorestframework_simplejwt settings
-SIMPLE_JWT = {
-    "SIGNING_KEY": os.getenv("SECRET_KEY"),
-    "ALGORITHM": "HS256",
-    "ACCESS_TOKEN_LIFETIME": 86400,
-    "REFRESH_TOKEN_LIFETIME": 604800,
-}
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "adoption_ms.authentication.GoogleOAuth2Authentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "adoption_ms.authentication.CustomJWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
 }
