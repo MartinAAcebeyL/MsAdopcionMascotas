@@ -1,1 +1,2 @@
-print("hola mundo")
+def suma(*args):
+    return sum(args)
