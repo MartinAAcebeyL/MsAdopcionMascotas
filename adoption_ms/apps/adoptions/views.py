@@ -5,12 +5,14 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import AdoptionRequestSerializer
+from utils import roles_required
 
 
 class RequestAdoptionView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = AdoptionRequestSerializer
 
+    @roles_required(["adoptante"])
     def post(self, request):
         try:
             serializer = self.serializer_class(data=request.data)

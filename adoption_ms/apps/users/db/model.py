@@ -12,7 +12,7 @@ class UserModel:
     ) -> dict:
         if is_complete_info:
             user_data["is_complete_info"] = True
-            
+
         user = self.users_collection.find_one_and_update(
             {"_id": ObjectId(user_id)},
             {"$set": user_data},
