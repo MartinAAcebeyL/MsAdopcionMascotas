@@ -26,3 +26,9 @@ class UserModel:
             },
         )
         return user
+
+    def is_user_complete_info(self, user_id: str) -> bool:
+        user = self.users_collection.find_one(
+            {"_id": ObjectId(user_id), "is_complete_info": True}
+        )
+        return user is not None
