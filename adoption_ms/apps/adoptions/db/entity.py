@@ -7,8 +7,10 @@ class AdoptionEntity(models.Model):
         ("progress", "In Progress"),
         ("rejected", "Rejected"),
     ]
+    _id = models.CharField(max_length=24)
     pet_id = models.CharField(max_length=24)
-    user_id = models.CharField(max_length=50)
+    user_id = models.CharField(max_length=24)
+    owner_id = models.CharField(max_length=24)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
