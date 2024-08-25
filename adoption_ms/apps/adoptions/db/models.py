@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from frameworks import mongo_client
 
@@ -30,6 +31,9 @@ class Adoption:
             {
                 "$match": {
                     "owner_id": owner_id,
+                    "deleted_at": {
+                        "$exists": False
+                    },  # Ensure deleted_at does not exist
                 }
             },
             {
@@ -59,3 +63,28 @@ class Adoption:
             },
         ]
         return list(self.collection.aggregate(pipeline))
+
+    def get_adoption_request_by_id(
+        self, adoption_id: str, is_to_accept_or_reject: bool = False
+    ):
+        filter_criteria = {"_id": adoption_id}
+        if is_to_accept_or_reject:
+            filter_criteria.update(
+                {
+                    "deleted_at": {"$exists": False},
+                }
+            )
+        return self.collection.find_one(filter_criteria)
+
+    def accept_or_reject_adoption_request(
+        self, adoption_id: str, action: str, comments: str
+    ):
+        filter_criteria = {"_id": adoption_id}
+        update_data = {
+            "$set": {
+                "status": action,
+                "comments": comments,
+                "deleted_at": datetime.datetime.now(),
+            }
+        }
+        self.collection.update_one(filter_criteria, update_data)
